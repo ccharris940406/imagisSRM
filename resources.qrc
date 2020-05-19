@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/add.png</file>
+        <file>Resources/sub.png</file>
+        <file>Resources/hide.png</file>
+        <file>Resources/show.png</file>
+        <file>Resources/success.png</file>
+        <file>Resources/fail.png</file>
+	<file>Resources/reportIcon.png</file>
+    </qresource>
+</RCC>

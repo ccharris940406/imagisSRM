@@ -1,0 +1,152 @@
+<report type="Basic Text SR">
+    <sopclass uid="1.2.840.10008.5.1.4.1.1.88.11">BasicTextSRStorage</sopclass>
+    <modality>SR</modality>
+
+    <referringphysician>
+        <name>
+            <first> </first>
+            <last> </last>
+            <suffix> </suffix>
+        </name>
+    </referringphysician>
+
+    <patient>
+        <id> </id>
+        <name>
+            <first> </first>
+            <last> </last>
+        </name>
+        <birthday>
+            <date> </date>
+        </birthday>
+        <sex> </sex>
+    </patient>
+
+    <study uid=" ">
+        <description>GetDescription</description>
+    </study>
+
+    <series uid=" ">
+        <number>1</number>
+        <description>Structured Report Series</description>
+    </series>
+
+    <instance uid=" ">
+        <number>1</number>
+        <creation uid="1.2.276.0.7230010.3.0.3.5.3">
+            <date> </date>
+            <time> </time>
+        </creation>
+    </instance>
+
+    <coding>
+        <scheme designator="99_OFFIS_DCMTK">
+            <uid>1.2.276.0.7230010.3.0.0.1</uid>
+            <name>OFFIS DCMTK Coding Scheme</name>
+            <organization>Centro de Biofisica Medica. Software Imagis</organization>
+        </scheme>
+    </coding>
+
+    <evidence type="Current Requested Procedure">
+        <study uid=" ">
+            <series uid=" ">
+                <value>
+                    <sopclass uid=" "> </sopclass>
+                    <instance uid=" "/>
+                </value>
+            </series>
+        </study>
+    </evidence>
+
+    <document>
+        <completion flag="PARTIAL"/>
+        <verification flag="UNVERIFIED"/>
+        <content>
+            <date> </date>
+            <time> </time>
+            <container flag="SEPARATE">
+                <concept>
+                    <value>DT.05</value>
+                    <scheme>
+                        <designator>99_OFFIS_DCMTK</designator>
+                    </scheme>
+                    <meaning> </meaning>
+                </concept>
+                <pname>
+                    <relationship>HAS OBS CONTEXT</relationship>
+                    <concept>
+                        <value>IHE.04</value>
+                        <scheme>
+                            <designator>99_OFFIS_DCMTK</designator>
+                        </scheme>
+                        <meaning>Observer Name</meaning>
+                    </concept>
+                    <value>
+                        <first> Observer Name</first>
+                        <last> Observer Name</last>
+                        <suffix> Observer suffix </suffix>
+                    </value>
+                </pname>
+                <code>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>CODE_05</value>
+                        <scheme>
+                            <designator>99_OFFIS_DCMTK</designator>
+                        </scheme>
+                        <meaning>Hospital Name</meaning>
+                    </concept>
+                    <value>CODE_06</value>
+                    <scheme>
+                        <designator>99_OFFIS_DCMTK</designator>
+                    </scheme>
+                    <meaning>Juan Bruno Zayas</meaning>
+                </code>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>55115-0</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Request</meaning>
+                    </concept>
+                    <value> </value>
+                </text>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>55111-9</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Current Procedure Descriptions</meaning>
+                    </concept>
+                    <value> </value>
+                </text>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>59776-5</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Findings</meaning>
+                    </concept>
+                    <value> </value>
+                </text>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>19005-8</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Impressions</meaning>
+                    </concept>
+                    <value> </value>
+                </text>
+            </container>
+        </content>
+    </document>
+</report>
