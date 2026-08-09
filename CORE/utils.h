@@ -13,7 +13,9 @@
 
 //dcmSend codes
 #define APPLICATIONTITLE                        "DCMSEND"
-#define PEERAPPLICATIONTITLE                    "ANY-SCP"
+#define PEERAPPLICATIONTITLE                    "DCM4CHEE"
+#define PEERHOST                                "127.0.0.1"
+#define PEERPORT                                11112
 //exit codes
 //File
 #define EXIT_FAIL_FILE_DAMAGED                  0b1101

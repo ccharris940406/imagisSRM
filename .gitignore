@@ -1,0 +1,18 @@
+# Build artifacts
+/build/
+cmake-build-*/
+CMakeLists.txt.user*
+
+# IDE
+.idea/
+
+# macOS
+.DS_Store
+
+# Local test PACS (dcm4chee Docker-persisted data)
+dcm4chee-test/data/
+
+# Runtime-generated: C-GET retrieval cache and the local pending queue
+AuxFolders/PACS_tmp/
+AuxFolders/Pending/*.dat
+AuxFolders/Pending/*.dst

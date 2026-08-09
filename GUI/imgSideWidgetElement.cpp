@@ -6,6 +6,7 @@
 
 #include <QMouseEvent>
 #include <QDebug>
+#include <QDir>
 #include <utility>
 #include "CORE/utils.h"
 #include "CORE/imgSRCstore.h"
@@ -101,12 +102,37 @@ void imgSideWidgetElement::mark() {
 void imgSideWidgetElement::paintImage() {
     DcmFileFormat fileFormat(dataSetHandler.getDataSet());
     if(dataSetHandler.getModality() != "SR"){
-    imgSRCstore::makeThubImage("current.png", &fileFormat);
-    ui->lbMiniatura->setPixmap(QPixmap("current.png"));
-    QFile::remove("current.png");
-    } else{
-        ui->lbMiniatura->setPixmap(QPixmap(":/Resources/reportIcon.png"));
+        imgSRCstore::makeThubImage("current.png", &fileFormat);
+        ui->lbMiniatura->setPixmap(QPixmap("current.png"));
+        QFile::remove("current.png");
+        return;
     }
+
+    // SR reports have no pixel data of their own: look for the actual image
+    // this report is about, in the local cache of the same study (populated
+    // by "Buscar en PACS"), and thumbnail that instead of a generic icon.
+    QString studyDir = "../AuxFolders/PACS_tmp/" + QString(dataSetHandler.GetStudyData().c_str());
+    QDir dir(studyDir);
+    if (dir.exists()) {
+        dir.setFilter(QDir::Files);
+        for (const QString &fileName: dir.entryList()) {
+            DcmFileFormat imageFileFormat;
+            if (imageFileFormat.loadFile((studyDir + "/" + fileName).toStdString().c_str()).bad())
+                continue;
+
+            OFString modality;
+            imageFileFormat.getDataset()->findAndGetOFString(DCM_Modality, modality);
+            if (modality == "SR")
+                continue;
+
+            imgSRCstore::makeThubImage("current.png", &imageFileFormat);
+            ui->lbMiniatura->setPixmap(QPixmap("current.png"));
+            QFile::remove("current.png");
+            return;
+        }
+    }
+
+    ui->lbMiniatura->setPixmap(QPixmap(":/Resources/reportIcon.png"));
 }
 
 void

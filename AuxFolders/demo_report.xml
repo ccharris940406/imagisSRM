@@ -1,0 +1,152 @@
+<report type="Basic Text SR">
+    <sopclass uid="1.2.840.10008.5.1.4.1.1.88.11">BasicTextSRStorage</sopclass>
+    <modality>SR</modality>
+
+    <referringphysician>
+        <name>
+            <first>Carlos</first>
+            <last>Ramirez</last>
+            <suffix> </suffix>
+        </name>
+    </referringphysician>
+
+    <patient>
+        <id>DEMO0001</id>
+        <name>
+            <first>Maria</first>
+            <last>Fernandez Lopez</last>
+        </name>
+        <birthday>
+            <date>1985-03-14</date>
+        </birthday>
+        <sex>F</sex>
+    </patient>
+
+    <study uid="1.2.276.0.7230010.3.1.2.1786266373.8943">
+        <description>TC de abdomen y pelvis con contraste</description>
+    </study>
+
+    <series uid="1.2.276.0.7230010.3.1.3.1786266373.1186">
+        <number>1</number>
+        <description>Structured Report Series</description>
+    </series>
+
+    <instance uid="1.2.276.0.7230010.3.1.4.1786266373.1464">
+        <number>1</number>
+        <creation uid="1.2.276.0.7230010.3.0.3.5.3">
+            <date>2026-08-09</date>
+            <time>09:30:00</time>
+        </creation>
+    </instance>
+
+    <coding>
+        <scheme designator="99_OFFIS_DCMTK">
+            <uid>1.2.276.0.7230010.3.0.0.1</uid>
+            <name>OFFIS DCMTK Coding Scheme</name>
+            <organization>Centro de Biofisica Medica. Software Imagis</organization>
+        </scheme>
+    </coding>
+
+    <evidence type="Current Requested Procedure">
+        <study uid="1.2.276.0.7230010.3.1.2.1786266373.8943">
+            <series uid="1.2.276.0.7230010.3.1.3.1786266373.1186">
+                <value>
+                    <sopclass uid="1.2.840.10008.5.1.4.1.1.2">CTImageStorage</sopclass>
+                    <instance uid="1.2.276.0.7230010.3.1.4.1786266373.1297"/>
+                </value>
+            </series>
+        </study>
+    </evidence>
+
+    <document>
+        <completion flag="COMPLETE"/>
+        <verification flag="UNVERIFIED"/>
+        <content>
+            <date>2026-08-09</date>
+            <time>09:30:00</time>
+            <container flag="SEPARATE">
+                <concept>
+                    <value>DT.05</value>
+                    <scheme>
+                        <designator>99_OFFIS_DCMTK</designator>
+                    </scheme>
+                    <meaning>Reporte Estructurado</meaning>
+                </concept>
+                <pname>
+                    <relationship>HAS OBS CONTEXT</relationship>
+                    <concept>
+                        <value>IHE.04</value>
+                        <scheme>
+                            <designator>99_OFFIS_DCMTK</designator>
+                        </scheme>
+                        <meaning>Observer Name</meaning>
+                    </concept>
+                    <value>
+                        <first>Carlos</first>
+                        <last>Ramirez</last>
+                        <suffix> </suffix>
+                    </value>
+                </pname>
+                <code>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>CODE_05</value>
+                        <scheme>
+                            <designator>99_OFFIS_DCMTK</designator>
+                        </scheme>
+                        <meaning>Hospital Name</meaning>
+                    </concept>
+                    <value>CODE_06</value>
+                    <scheme>
+                        <designator>99_OFFIS_DCMTK</designator>
+                    </scheme>
+                    <meaning>Hospital Nacional Demo</meaning>
+                </code>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>55115-0</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Request</meaning>
+                    </concept>
+                    <value>Dolor abdominal derecho de 3 dias de evolucion. Se solicita TC de abdomen para descartar apendicitis aguda.</value>
+                </text>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>55111-9</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Current Procedure Descriptions</meaning>
+                    </concept>
+                    <value>Tomografia computarizada de abdomen y pelvis con contraste intravenoso, cortes axiales de 5mm.</value>
+                </text>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>59776-5</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Findings</meaning>
+                    </concept>
+                    <value>El apendice cecal se encuentra distendido, con diametro de 12mm, pared engrosada y estriacion de la grasa periapendicular. No se observa absceso ni coleccion liquida libre. Resto del estudio sin hallazgos relevantes.</value>
+                </text>
+                <text>
+                    <relationship>CONTAINS</relationship>
+                    <concept>
+                        <value>19005-8</value>
+                        <scheme>
+                            <designator>LN</designator>
+                        </scheme>
+                        <meaning>Impressions</meaning>
+                    </concept>
+                    <value>Hallazgos compatibles con apendicitis aguda no complicada. Se recomienda correlacion clinica y valoracion quirurgica.</value>
+                </text>
+            </container>
+        </content>
+    </document>
+</report>

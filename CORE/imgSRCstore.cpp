@@ -10,7 +10,15 @@
 #include "dcmtk/ofstd/ofstd.h"
 #include "dcmtk/dcmnet/dstorscu.h"
 #include "dcmtk/dcmsr/dsrdoc.h"
+#include "dcmtk/dcmsr/dsrtypes.h"
 #include "utils.h"
+
+// SR documents this app writes (imgSRCstore::xml2dsr) are saved with a UTF-8
+// SpecificCharacterSet, which older DCMTK content-item validation rejects as
+// "invalid characters" on re-read. These flags make DSRDocument::read() tolerate
+// that instead of aborting the parse.
+static const size_t LENIENT_SR_READ_FLAGS =
+        DSRTypes::RF_acceptInvalidContentItemValue | DSRTypes::RF_ignoreContentItemErrors;
 
 int imgSRCstore::dcmSend( const std::string& peer, unsigned short port,  const std::string& filename) {
 
@@ -112,7 +120,7 @@ int imgSRCstore::dsr2xml(const std::string &filename, DcmDataset *dts) {
     std::ofstream stream(filename.c_str(), std::ios::out);
 
     DSRDocument *dsrDocument = new DSRDocument();
-    OFCondition cond = dsrDocument->read(*dts);
+    OFCondition cond = dsrDocument->read(*dts, LENIENT_SR_READ_FLAGS);
 
     if(cond.bad()){
         return 10;
@@ -131,7 +139,7 @@ int imgSRCstore::dsr2xml(const std::string &filename, DcmDataset *dts) {
 int imgSRCstore::dsr2html(const std::string &filename, DcmDataset *dcmDataset) {
     std::ofstream stream(filename.c_str(), std::ios::out);
     DSRDocument *dsrDocument = new DSRDocument();
-    OFCondition cond = dsrDocument->read(*dcmDataset);
+    OFCondition cond = dsrDocument->read(*dcmDataset, LENIENT_SR_READ_FLAGS);
 
     if(cond.bad()){
         return 10;

@@ -5,6 +5,7 @@
 //#define xml2dsr "/home/ccharris/Projects/CBM/libs/DCMTK/3.6.5/install/bin/xml2dsr "
 
 #include <QtCore/QFile>
+#include <QStringList>
 #include <QDate>
 #include <QDebug>
 #include <QProgressBar>
@@ -14,8 +15,8 @@
 #include "./CORE/imgSRCstore.h"
 #include "dcmtk/dcmdata/dcuid.h"
 
-#define peer "127.0.0.1"
-#define port 5020
+#define peer PEERHOST
+#define port PEERPORT
 
 imgXMLMaker::imgXMLMaker(DcmDataset *dataset) {
     dataSetHandler.setDataSet(dataset);
@@ -100,22 +101,19 @@ void imgXMLMaker::setReferringphysician(QDomElement &element) {
 
 void imgXMLMaker::setPatient(QDomElement &element) {
 
-    QString first = "", last = "", full;
-
-    full = dataSetHandler.GetPatientData(PatientName).c_str();
-
-    bool blast = 0;
-
-    foreach(auto x, full){
-        if(x == ' ' && !blast){
-            blast = true;
-        }
-        else if(!blast){
-            last += x;
-        } else{
-            first += x;
-        }
-    }
+    // Split on the DICOM PN component separator ('^'), not on spaces: family
+    // and given names can themselves contain spaces (e.g. "Gil Herrera^Roberto").
+    // Splitting on the first space instead would reconstruct a PatientName that
+    // no longer matches the source image byte-for-byte, and dcm4chee derives its
+    // internal patient identity from a hash of PatientName+PatientBirthDate --
+    // any mismatch there makes it treat the report as a different patient with
+    // a colliding PatientID and refuse the C-STORE.
+    const char *rawName = nullptr;
+    dataSetHandler.getDataSet()->findAndGetString(DCM_PatientName, rawName);
+    QString full = rawName ? QString(rawName) : "";
+    QStringList nameParts = full.split('^');
+    QString last = nameParts.size() > 0 ? nameParts[0] : "";
+    QString first = nameParts.size() > 1 ? nameParts[1] : "";
 
     element.firstChildElement("id")
     .appendChild(doc->createTextNode(
@@ -143,14 +141,32 @@ void imgXMLMaker::setStudy(QDomElement &element) {
 }
 
 void imgXMLMaker::setSeries(QDomElement &element) {
+    // Editing an existing SR (same study, already a report): keep its own
+    // SeriesInstanceUID so the re-sent object stays the same DICOM instance
+    // (an update in place) instead of spawning a parallel series.
+    if (dataSetHandler.getModality() == "SR") {
+        element.setAttribute("uid", dataSetHandler.GetSeriesData().c_str());
+        return;
+    }
     char uid[100];
     dcmGenerateUniqueIdentifier(uid, SITE_SERIES_UID_ROOT);
     element.setAttribute("uid", uid);
 }
 
 void imgXMLMaker::setInstance(QDomElement &element) {
-    char uid[100];
-    dcmGenerateUniqueIdentifier(uid, SITE_INSTANCE_UID_ROOT);
+    // Same rationale as setSeries(): reuse the SOPInstanceUID when we are
+    // re-sending a report that was already loaded as SR, so "Enviar" updates
+    // that same object instead of creating a new, disconnected report every
+    // time. A brand-new report (loaded from a plain image) still gets a
+    // freshly generated UID.
+    QString uid;
+    if (dataSetHandler.getModality() == "SR") {
+        uid = dataSetHandler.getInstanceUID().c_str();
+    } else {
+        char buffer[100];
+        dcmGenerateUniqueIdentifier(buffer, SITE_INSTANCE_UID_ROOT);
+        uid = buffer;
+    }
     element.setAttribute("uid", uid);
     element.firstChildElement("creation").firstChild().appendChild(
             doc->createTextNode(QDate::currentDate().toString("yyyy-MM-dd")));

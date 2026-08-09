@@ -10,13 +10,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(ITK_DIR		   	/home/ccharris/Projects/CBM/libs/ITK/5.0.1/install/lib/cmake/ITK-5.0)
-
-find_package(ITK)
-include(${ITK_USE_FILE})
-include_directories(${ITK_INCLUDE_PATH})
-
 find_package(Qt5 COMPONENTS Widgets REQUIRED Xml PrintSupport Core Concurrent)
+find_package(DCMTK REQUIRED)
+include_directories(${DCMTK_INCLUDE_DIRS})
 
 
 add_executable(imagisSRM
@@ -28,6 +24,9 @@ add_executable(imagisSRM
         GUI/imgSideWidgetElement.cpp
         GUI/imgSideWidgetElement.h
         GUI/imgSideWidgetElement.ui
-        CORE/imgSRDataSetHandler.cpp CORE/imgSRDataSetHandler.h CORE/utils.h GUI/imgPendingFileHandler.cpp GUI/imgPendingFileHandler.h GUI/imgXMLMaker.cpp GUI/imgXMLMaker.h GUI/imgSendThread.cpp GUI/imgSendThread.h CORE/imgSRCstore.cpp CORE/imgSRCstore.h)
+        CORE/imgSRDataSetHandler.cpp CORE/imgSRDataSetHandler.h CORE/utils.h GUI/imgPendingFileHandler.cpp GUI/imgPendingFileHandler.h GUI/imgXMLMaker.cpp GUI/imgXMLMaker.h GUI/imgSendThread.cpp GUI/imgSendThread.h CORE/imgSRCstore.cpp CORE/imgSRCstore.h
+        CORE/imgSRQuery.cpp CORE/imgSRQuery.h GUI/imgQueryDialog.cpp GUI/imgQueryDialog.h
+        GUI/imgImagePickerDialog.cpp GUI/imgImagePickerDialog.h
+        GUI/imgReportPickerDialog.cpp GUI/imgReportPickerDialog.h)
 
-target_link_libraries(imagisSRM PRIVATE Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::Core Qt5::Concurrent ${ITK_LIBRARIES})
+target_link_libraries(imagisSRM PRIVATE Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::Core Qt5::Concurrent DCMTK::DCMTK)

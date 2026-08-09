@@ -62,29 +62,29 @@ bool imgSRDataSetHandler::setDataSet(DcmDataset *dcmDataset) {
 std::string imgSRDataSetHandler::getModality() {
     const char *buffer =  nullptr;
     dataSet->findAndGetString(DCM_Modality, buffer);
-    return std::__cxx11::string(buffer);
+    return std::string(buffer);
 }
 
 std::string imgSRDataSetHandler::getHospitalName() {
     const char *buffer = nullptr;
     dataSet->findAndGetString(DCM_InstitutionName, buffer);
-    return std::__cxx11::string(buffer);
+    return std::string(buffer);
 }
 
 std::string imgSRDataSetHandler::getSopclassUID() {
     const char *buffer = nullptr;
     dataSet->findAndGetString(DCM_SOPClassUID, buffer);
-    return std::__cxx11::string(buffer);
+    return std::string(buffer);
 }
 
 std::string imgSRDataSetHandler::getInstanceUID() {
     const char *buffer = nullptr;
     dataSet->findAndGetString(DCM_SOPInstanceUID, buffer);
-    return std::__cxx11::string(buffer);
+    return std::string(buffer);
 }
 
 std::string imgSRDataSetHandler::GetPatientData(int type) {
-    std::__cxx11::string aux;
+    std::string aux;
 
     const char *buffer = nullptr;
     switch (type){
@@ -97,28 +97,28 @@ std::string imgSRDataSetHandler::GetPatientData(int type) {
                 int year, month;
                 convertDate(buffer, year, month);
                 int age = now_t.tm_mon >= month? now_t.tm_year - year + 1900 : now_t.tm_year - year + 1899;
-                return std::__cxx11::string(std::to_string(age));
+                return std::string(std::to_string(age));
             } else{
                 int year;
                 dataSet->findAndGetString(DCM_PatientAge, buffer);
                 if(buffer == nullptr || buffer == "")
                     return "";
                 convertDate(buffer, year);
-                return std::__cxx11::string(std::to_string(year));
+                return std::string(std::to_string(year));
             }
         case PatientID:
             dataSet->findAndGetString(DCM_PatientID, buffer);
-            return std::__cxx11::string(buffer);
+            return std::string(buffer);
         case PatientName:{
             dataSet->findAndGetString(DCM_PatientName, buffer);
             aux = buffer;
             replaceAux(aux);
-            return std::__cxx11::string(aux);}
+            return std::string(aux);}
         case PatientSex:
             dataSet->findAndGetString(DCM_PatientSex, buffer);
-            return std::__cxx11::string(buffer);
+            return std::string(buffer);
         default:
-            return std::__cxx11::string("");
+            return std::string("");
     }
 
 }
@@ -126,13 +126,13 @@ std::string imgSRDataSetHandler::GetPatientData(int type) {
 std::string imgSRDataSetHandler::GetStudyData(int type) {
     const char *buffer = nullptr;
     dataSet->findAndGetString(DCM_StudyInstanceUID, buffer);
-    return std::__cxx11::string(buffer);
+    return std::string(buffer);
 }
 
 std::string imgSRDataSetHandler::GetSeriesData(int type) {
     const char *buffer = nullptr;
     dataSet->findAndGetString(DCM_SeriesInstanceUID, buffer);
-    return std::__cxx11::string(buffer);
+    return std::string(buffer);
 }
 
 DcmDataset *imgSRDataSetHandler::getDataSet() {
