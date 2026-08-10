@@ -8,11 +8,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
+      # ---------------- Linux ----------------
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -23,14 +31,62 @@ jobs:
             libdcmtk-dev \
             libnsl-dev
 
-      - name: Configure
+      - name: Configure (Linux)
+        if: runner.os == 'Linux'
         run: cmake -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=Release -S .
 
-      - name: Build
-        run: cmake --build build -j$(nproc)
+      # ---------------- macOS ----------------
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install qt@5 dcmtk
 
-      - name: Upload executable
+      - name: Configure (macOS)
+        if: runner.os == 'macOS'
+        run: cmake -B build -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5)" -DCMAKE_BUILD_TYPE=Release -S .
+
+      # ---------------- Windows ----------------
+      - name: Install Qt (Windows)
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+
+      - name: Setup vcpkg (Windows)
+        if: runner.os == 'Windows'
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: 'ea2a964f9303270322cf3f2d51c265ba0a8ae0d'
+
+      - name: Install DCMTK via vcpkg (Windows)
+        if: runner.os == 'Windows'
+        run: ${{ env.VCPKG_ROOT }}/vcpkg install dcmtk:x64-windows
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Release -S .
+
+      # ---------------- Build (all OSes) ----------------
+      - name: Build
+        run: cmake --build build --config Release -j
+
+      # ---------------- Upload artifacts ----------------
+      - name: Upload executable (Linux)
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
           name: imagisSRM-linux
           path: build/imagisSRM
+
+      - name: Upload executable (macOS)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: imagisSRM-macos
+          path: build/imagisSRM
+
+      - name: Upload executable (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: imagisSRM-windows
+          path: build/Release/imagisSRM.exe
