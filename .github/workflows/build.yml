@@ -53,17 +53,20 @@ jobs:
 
       - name: Setup vcpkg (Windows)
         if: runner.os == 'Windows'
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgGitCommitId: 'ea2a964f9303270322cf3f2d51c265ba0a8ae0d'
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+        shell: pwsh
 
       - name: Install DCMTK via vcpkg (Windows)
         if: runner.os == 'Windows'
-        run: ${{ env.VCPKG_ROOT }}/vcpkg install dcmtk:x64-windows
+        run: .\vcpkg\vcpkg.exe install dcmtk:x64-windows
+        shell: pwsh
 
       - name: Configure (Windows)
         if: runner.os == 'Windows'
-        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Release -S .
+        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="$PWD\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Release -S .
+        shell: pwsh
 
       # ---------------- Build (all OSes) ----------------
       - name: Build
