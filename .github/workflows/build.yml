@@ -28,3 +28,9 @@ jobs:
 
       - name: Build
         run: cmake --build build -j$(nproc)
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: imagisSRM-linux
+          path: build/imagisSRM
