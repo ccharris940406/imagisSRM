@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches: [ master ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ master ]
 
@@ -93,3 +94,31 @@ jobs:
         with:
           name: imagisSRM-windows
           path: build/Release/imagisSRM.exe
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Rename binaries for release
+        run: |
+          mv artifacts/imagisSRM-linux/imagisSRM artifacts/imagisSRM-linux-x64
+          mv artifacts/imagisSRM-macos/imagisSRM artifacts/imagisSRM-macos-x64
+          mv artifacts/imagisSRM-windows/imagisSRM.exe artifacts/imagisSRM-windows-x64.exe
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/imagisSRM-linux-x64
+            artifacts/imagisSRM-macos-x64
+            artifacts/imagisSRM-windows-x64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
