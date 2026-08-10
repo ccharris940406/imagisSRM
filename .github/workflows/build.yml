@@ -20,7 +20,8 @@ jobs:
             clang \
             qtbase5-dev \
             qtbase5-dev-tools \
-            libdcmtk-dev
+            libdcmtk-dev \
+            libnsl-dev
 
       - name: Configure
         run: cmake -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=Release -S .
